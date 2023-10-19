@@ -16,6 +16,8 @@ const RequestDetailsComponent = ({ data }) => {
     day < 10 ? "0" : ""
   }${day}`;
 
+  console.log(data);
+
   React.useEffect(() => {
     let user =
       typeof window !== undefined
@@ -31,7 +33,7 @@ const RequestDetailsComponent = ({ data }) => {
       <div className="bg-white rounded-md px-10 py-8 text-sm font-medium space-y-8 font-Manrope capitalize">
         <div className="flex items-center justify-between">
           <h1 className="text-base">Request Details</h1>
-          {admin && data?.status !== 2 && (
+          {admin && data?.status !== 2 && data?.installmentStatus && (
             <RequestApproveRejectComponent
               requestOwner={data?.requestOwner}
               requestId={data?.requestId}
@@ -73,7 +75,7 @@ const RequestDetailsComponent = ({ data }) => {
               <h1 className="font-bold text-gray-900">Status</h1>
               <p>{statuses[data?.status]}</p>
             </div>
-            {statuses[data?.status] === 3 && (
+            {data?.status === 3 && (
               <h1>
                 Denial Reason :{" "}
                 <span className="font-normal">{data?.denialReason}</span>
@@ -100,7 +102,7 @@ const RequestDetailsComponent = ({ data }) => {
               <h1 className="font-bold text-gray-900">Installment No : </h1>
               <p>{data?.installmentNumber}</p>
             </div>
-
+        
             <div className="flex items-center space-x-3 flex-wrap">
               <h1 className="font-bold text-gray-900">Documents : </h1>
               {data?.ipfsDocumentHashes?.length > 0 ? (

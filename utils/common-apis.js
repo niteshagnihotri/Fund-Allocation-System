@@ -40,20 +40,21 @@ export async function updateFundRequestData(
 ) {
   const currentIPFS = await getRequestsIPFSHash();
   const requestId = requestDataToAdd.requestId;
+  const requestOwner = requestDataToAdd.requestOwner;
 
   let jsonData = {};
   if (currentIPFS === "") {
-    if (!jsonData[currentUser]) {
-      jsonData[currentUser] = {};
+    if (!jsonData[requestOwner]) {
+      jsonData[requestOwner] = {};
     }
-    jsonData[currentUser][requestId] = requestDataToAdd;
+    jsonData[requestOwner][requestId] = requestDataToAdd;
   } else {
     try {
       jsonData = await fetchIPFSData();
-      if (!jsonData[currentUser]) {
-        jsonData[currentUser] = {};
+      if (!jsonData[requestOwner]) {
+        jsonData[requestOwner] = {};
       }
-      jsonData[currentUser][requestId] = requestDataToAdd;
+      jsonData[requestOwner][requestId] = requestDataToAdd;
     } catch (error) {
       console.error("Error fetching or parsing data from IPFS:", error);
       return error;
@@ -61,7 +62,7 @@ export async function updateFundRequestData(
   }
 
   jsonData.updatedAt = new Date().toISOString();
-  console.log("jsonData =============> ", jsonData);
+  console.log("jsonData updated =============> ", jsonData);
   const updatedDataString = JSON.stringify(jsonData);
 
   try {
@@ -90,8 +91,10 @@ export async function fetchIPFSData() {
   if (currentIPFS !== "") {
     const data = await fetch("https://ipfs.io/ipfs/" + currentIPFS);
     const jsonData = await data.json();
+    // console.log("jsonData ============> ", jsonData);
     return await jsonData;
   }
+
   return {};
 }
 
@@ -212,6 +215,35 @@ export async function getAllUsersRequestsCount() {
   }
 }
 
+export async function getAllUsersInstallmentCount() {
+  try {
+    const { contract } = await connectWeb3();
+    if (!contract) {
+      toast.error("Please connect metamask");
+      return false;
+    }
+    let count = 0;
+    const allRequests = await fetchIPFSData();
+
+    for (const userAddress in allRequests) {
+      if (typeof allRequests[userAddress] === "object") {
+        // Iterate through the inner object
+        for (const requestId in allRequests[userAddress]) {
+          const request = allRequests[userAddress][requestId];
+          if (request.installmentStatus === true) {
+            count++;
+          }
+        }
+      }
+
+      return count;
+    }
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
+}
+
 export async function getUserByAddress(userAddress) {
   try {
     const { contract } = await connectWeb3();
@@ -273,8 +305,12 @@ export async function getAllTransactions() {
   if (currentIPFS !== "") {
     const data = await fetch("https://ipfs.io/ipfs/" + currentIPFS);
     const jsonData = await data.json();
-    
-    jsonData.sort((a, b) => new Date(b?.date_created ? b.date_created : 0) - new Date(a?.date_created ? a?.date_created : 0));
+
+    jsonData.sort(
+      (a, b) =>
+        new Date(b?.date_created ? b.date_created : 0) -
+        new Date(a?.date_created ? a?.date_created : 0)
+    );
     return await jsonData;
   }
   return [];
@@ -282,12 +318,12 @@ export async function getAllTransactions() {
 
 export async function addTransaction(data) {
   try {
-    const {contract} = await connectWeb3();
+    const { contract } = await connectWeb3();
     let jsonData = await getAllTransactions();
     if (!Array.isArray(jsonData)) {
       jsonData = [];
     }
-    jsonData.push({...data, date_created: new Date().toISOString()});
+    jsonData.push({ ...data, date_created: new Date().toISOString() });
     const updatedDataString = JSON.stringify(jsonData);
     const { cid } = await ipfsClient.add(updatedDataString);
     await contract.addTransaction(cid.toString());

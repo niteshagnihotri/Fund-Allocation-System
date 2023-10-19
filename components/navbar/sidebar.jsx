@@ -1,9 +1,13 @@
 import React from "react";
-import { BiArrowToRight } from "react-icons/bi";
+import { BiArrowToRight, BiHomeAlt2, BiRegistered } from "react-icons/bi";
 import useStore from "@/store/userstore";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Logo } from "@/components/logo";
+import {MdOutlineFindInPage, MdOutlineRequestPage} from 'react-icons/md';
+import {VscGitPullRequestGoToChanges} from 'react-icons/vsc';
+import {TbTransfer} from 'react-icons/tb';
+import {AiOutlineTransaction} from 'react-icons/ai';
 
 const Sidebar = () => {
   const logoutStore = useStore((state) => state.logout);
@@ -31,33 +35,33 @@ const Sidebar = () => {
             <>
               <Link
                 href="/"
-                className="font-medium text-gray-900 cursor-pointer hover:text-slate-500 "
+                className="font-medium text-gray-900 cursor-pointer flex items-center hover:text-slate-500 "
               >
-                Home
+               <BiHomeAlt2 className="mr-2"/> Home
               </Link>
               <Link
                 href="/users/requests/create"
-                className="font-medium text-gray-900 cursor-pointer hover:text-slate-500 "
+                className="font-medium text-gray-900 cursor-pointer flex items-center hover:text-slate-500 "
               >
-                Request Funds
+               <MdOutlineRequestPage className="mr-2"/> Request Funds
               </Link>
               <Link
                 href="/users/installment/create"
-                className="font-medium text-gray-900 cursor-pointer hover:text-slate-500 "
+                className="font-medium text-gray-900 cursor-pointer flex items-center hover:text-slate-500 "
               >
-                Request Installments
+              <VscGitPullRequestGoToChanges className="mr-2"/>   Request Installments
               </Link>
               <Link
                 href="/users/requests/status"
-                className="font-medium text-gray-900 cursor-pointer hover:text-slate-500 "
+                className="font-medium text-gray-900 cursor-pointer flex items-center hover:text-slate-500 "
               >
-                Track Request
+              <MdOutlineFindInPage className="mr-2"/>  Track Request
               </Link>
               <Link
                 href="/transfer"
-                className="font-medium text-gray-900 cursor-pointer hover:text-slate-500 "
+                className="font-medium text-gray-900 cursor-pointer flex items-center hover:text-slate-500 "
               >
-                Transfer Funds
+                <TbTransfer className="mr-2"/>  Transfer Funds
               </Link>
             </>
           )}
@@ -67,39 +71,45 @@ const Sidebar = () => {
             <>
               <Link
                 href="/"
-                className="font-medium text-gray-900 cursor-pointer hover:text-slate-500"
+                className="font-medium text-gray-900 cursor-pointer flex items-center hover:text-slate-500"
               >
-                Home
+              <BiHomeAlt2 className="mr-2"/>  Home
               </Link>
               <Link
                 href="/"
-                className="font-medium text-gray-900 cursor-pointer hover:text-slate-500"
+                className="font-medium text-gray-900 cursor-pointer flex items-center hover:text-slate-500"
               >
-                New Requests
+              <MdOutlineRequestPage className="mr-2"/>   Requests
               </Link>
               <Link
                 href="/admin/installments"
-                className="font-medium text-gray-900 cursor-pointer hover:text-slate-500"
+                className="font-medium text-gray-900 cursor-pointer flex items-center hover:text-slate-500"
               >
-                New Installments
+              <VscGitPullRequestGoToChanges className="mr-2"/>   Installments
               </Link>
               <Link
                 href="/admin/findrequest"
-                className="font-medium text-gray-900 cursor-pointer hover:text-slate-500"
+                className="font-medium text-gray-900 cursor-pointer flex items-center hover:text-slate-500"
               >
-                Find Request
+              <MdOutlineFindInPage className="mr-2"/>   Find Request
               </Link>
               <Link
                 href="/transfer"
-                className="font-medium text-gray-900 cursor-pointer hover:text-slate-500"
+                className="font-medium text-gray-900 cursor-pointer flex items-center hover:text-slate-500"
               >
-                Transfer Funds
+              <TbTransfer className="mr-2"/>   Transfer Funds
               </Link>
               <Link
                 href="/admin/transactions"
-                className="font-medium text-gray-900 cursor-pointer hover:text-slate-500"
+                className="font-medium text-gray-900 cursor-pointer flex items-center hover:text-slate-500"
               >
-                View Transactions
+              <AiOutlineTransaction className="mr-2"/>   Transactions
+              </Link>
+              <Link
+                href="/admin/register"
+                className="font-medium text-gray-900 cursor-pointer flex items-center hover:text-slate-500"
+              >
+              <BiRegistered className="mr-2"/>   Register User
               </Link>
             </>
           )}

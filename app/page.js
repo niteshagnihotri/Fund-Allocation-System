@@ -3,6 +3,7 @@ import React from "react";
 import useStore from "@/store/userstore";
 import UserHomeComponent from "@/components/home/user.requests.component";
 import AdminHomeComponent from "@/components/home/admin.requests.component";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
   const userStore = useStore((state) => state.user);
@@ -18,7 +19,7 @@ export default function Home() {
   }, []);
 
   return (
-    <div>
+    <>
       {userStore && userStore.role === "user" ? (
         <UserHomeComponent />
       ) : (
@@ -26,6 +27,6 @@ export default function Home() {
           <AdminHomeComponent />
         )
       )}
-    </div>
+    </>
   );
 }

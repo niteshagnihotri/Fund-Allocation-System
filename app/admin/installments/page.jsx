@@ -4,14 +4,22 @@ import React from "react";
 import InstallmentSectionComponent from "@/components/admin/installmentsection.component";
 import Tab from "@/components/requests/view/tab.component";
 import { HiOutlineDocumentSearch } from "react-icons/hi";
+import { useQuery } from "@tanstack/react-query";
+import { getAllUsersInstallmentCount } from "@/utils/common-apis";
+import LoadingButtonComponent from "@/components/inputs/loadingbutton.component";
 
 export default function InstallmentsPage (){
-  const [currentTab, setCurrentTab] = React.useState(2);
 
   const router = useRouter();
-  const handleTabChange = (tab) => {
-    setCurrentTab(tab);
-  };
+
+  const { data: installmentcount, status } = useQuery({
+    queryKey: ["installmentcount"],
+    queryFn: () => getAllUsersInstallmentCount(),
+  });
+
+  if(status === "loading") {
+    return <LoadingButtonComponent />
+  }
 
   return (
     <div className="space-y-8">
@@ -35,29 +43,15 @@ export default function InstallmentsPage (){
       <div className="bg-white flex flex-col gap-4 md:flex-row rounded-lg justify-between py-2 px-4">
         <div className="flex items-center text-sm cursor-pointer md:px-4 gap-0 md:gap-8 overflow-x-scroll md:overflow-hidden no-scrollbar capitalize">
           <Tab
-            onClick={() => handleTabChange(2)}
-            active={currentTab === 2}
-            count={0}
+            onClick={() => {}}
+            active={true}
+            count={installmentcount ? installmentcount : 0}
           >
-            Second
-          </Tab>
-          <Tab
-            onClick={() => handleTabChange(3)}
-            active={currentTab === 3}
-            count={0}
-          >
-            Third
-          </Tab>
-          <Tab
-            onClick={() => handleTabChange(4)}
-            active={currentTab === 4}
-            count={0}
-          >
-            Fourth
+           New Installments
           </Tab>
         </div>
       </div>
-      <InstallmentSectionComponent currentTab={currentTab} />
+      <InstallmentSectionComponent/>
     </div>
   );
 };

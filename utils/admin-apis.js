@@ -85,7 +85,7 @@ export async function fetchAllUsersRequestsByStatus(currentTab) {
   }
 }
 
-export async function fetchInstallmentRequestsByNumber(currentTab) {
+export async function fetchInstallmentRequestsByNumber() {
   try {
     if (checkAdminExists()) {
       const { contract } = await connectWeb3();
@@ -101,12 +101,7 @@ export async function fetchInstallmentRequestsByNumber(currentTab) {
           // Iterate over requests in each address
           for (const requestIdKey in address) {
             const request = address[requestIdKey];
-            // if (currentTab === "all") {
-            //   requestsData.push(request);
-            if (
-              request.installmentNumber === currentTab &&
-              request.installmentStatus === true
-            ) {
+            if (request.installmentStatus === true) {
               requestsData.push(request);
             }
           }
@@ -146,22 +141,17 @@ export async function transferInstallment(requestOwner, requestId) {
         );
 
         const receipt = await transaction.wait();
-        // console.log(receipt);
-        if (transaction) {
-          const requestData = await fetchRequestByOwnerAndID(
-            ethers.getAddress(requestOwner),
-            requestId
-          );
-          // await addTransaction()
-          await updateFundRequestData(
-            contract,
-            ethers.getAddress(requestOwner),
-            requestData
-          );
-          return true;
-        } else {
-          return false;
-        }
+        console.log(receipt);
+        const requestData = await fetchRequestByOwnerAndID(
+          ethers.getAddress(requestOwner),
+          requestId
+        );
+        await updateFundRequestData(
+          contract,
+          ethers.getAddress(requestOwner),
+          requestData
+        );
+        return true;
       } else {
         console.log("Please Connect Metamask");
       }

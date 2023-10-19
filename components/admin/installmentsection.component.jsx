@@ -4,10 +4,10 @@ import LoadingButtonComponent from "@/components/inputs/loadingbutton.component"
 import { fetchInstallmentRequestsByNumber } from "@/utils/admin-apis";
 import RequestsTableComponent from "../requests/view/requeststable.component";
 
-const InstallmentSectionComponent = ({ currentTab }) => {
+const InstallmentSectionComponent = () => {
   const { data, status } = useQuery({
-    queryKey: ["installments", currentTab],
-    queryFn: () => fetchInstallmentRequestsByNumber(currentTab),
+    queryKey: ["installments"],
+    queryFn: () => fetchInstallmentRequestsByNumber(),
   });
 
   if (status === "loading") {
