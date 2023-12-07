@@ -89,10 +89,9 @@ export async function getRequestsIPFSHash() {
 export async function fetchIPFSData() {
   const currentIPFS = await getRequestsIPFSHash();
   if (currentIPFS !== "") {
-    const data = await fetch("https://ipfs.io/ipfs/" + currentIPFS);
+    const data = await fetch("https://cloudflare-ipfs.com/ipfs/" + currentIPFS);
     const jsonData = await data.json();
-    // console.log("jsonData ============> ", jsonData);
-    return await jsonData;
+    return jsonData;
   }
 
   return {};
@@ -152,18 +151,20 @@ export async function getUserRequestCount() {
       approved: 0,
       denied: 0,
     };
-    allRequests.forEach((request) => {
-      if (request.status === 0) {
-        requestsCount.pending++;
-      } else if (request.status === 1) {
-        requestsCount.approved++;
-      } else if (request.status === 2) {
-        requestsCount.completed++;
-      } else if (request.status === 3) {
-        requestsCount.denied++;
-      }
-      requestsCount.all++;
-    });
+    if(allRequests){
+      allRequests.forEach((request) => {
+        if (request.status === 0) {
+          requestsCount.pending++;
+        } else if (request.status === 1) {
+          requestsCount.approved++;
+        } else if (request.status === 2) {
+          requestsCount.completed++;
+        } else if (request.status === 3) {
+          requestsCount.denied++;
+        }
+        requestsCount.all++;
+      });
+    }
 
     return requestsCount;
   } catch (error) {
@@ -187,28 +188,34 @@ export async function getAllUsersRequestsCount() {
       denied: 0,
     };
     const allRequests = await fetchIPFSData();
+    if(allRequests){
 
-    for (const userAddress in allRequests) {
-      if (typeof allRequests[userAddress] === "object") {
-        // Iterate through the inner object
-        for (const requestId in allRequests[userAddress]) {
-          const request = allRequests[userAddress][requestId];
-          // if(request.installmentStatus === true){
-          if (request.status === 0 && request.installmentStatus === true) {
-            requestsCount.pending++;
-          } else if (request.status === 1) {
-            requestsCount.approved++;
-          } else if (request.status === 2) {
-            requestsCount.completed++;
-          } else if (request.status === 3) {
-            requestsCount.denied++;
+      for (const userAddress in allRequests) {
+        if (typeof allRequests[userAddress] === "object") {
+          // Iterate through the inner object
+          for (const requestId in allRequests[userAddress]) {
+            const request = allRequests[userAddress][requestId];
+            // if(request.installmentStatus === true){
+            if (request.status === 0 && request.installmentStatus === true) {
+              requestsCount.pending++;
+            } else if (request.status === 1) {
+              requestsCount.approved++;
+            } else if (request.status === 2) {
+              requestsCount.completed++;
+            } else if (request.status === 3) {
+              requestsCount.denied++;
+            }
+            requestsCount.all++;
           }
-          requestsCount.all++;
         }
       }
+  
+      return requestsCount;
+    }
+    else{
+      return null;
     }
 
-    return requestsCount;
   } catch (error) {
     console.log(error);
     return false;
@@ -224,6 +231,7 @@ export async function getAllUsersInstallmentCount() {
     }
     let count = 0;
     const allRequests = await fetchIPFSData();
+    if(allRequests){
 
     for (const userAddress in allRequests) {
       if (typeof allRequests[userAddress] === "object") {
@@ -236,8 +244,10 @@ export async function getAllUsersInstallmentCount() {
         }
       }
 
-      return count;
     }
+    }
+    return count;
+
   } catch (error) {
     console.log(error);
     return false;
@@ -267,7 +277,7 @@ export async function getAdmin() {
   try {
     const { contract } = await connectWeb3();
     if (contract) {
-      const res = await contract.admin();
+      const res = await contract.getAdmin();
       return res;
     }
   } catch (error) {
@@ -303,7 +313,7 @@ export async function getTransactionIPFS() {
 export async function getAllTransactions() {
   const currentIPFS = await getTransactionIPFS();
   if (currentIPFS !== "") {
-    const data = await fetch("https://ipfs.io/ipfs/" + currentIPFS);
+    const data = await fetch("https://cloudflare-ipfs.com/ipfs/" + currentIPFS);
     const jsonData = await data.json();
 
     jsonData.sort(

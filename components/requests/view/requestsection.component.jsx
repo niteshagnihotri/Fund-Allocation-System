@@ -16,7 +16,9 @@ const RequestTableSection = ({ currentTab }) => {
 
   return (
     <div className="bg-white rounded-md min-h-[400px] flex flex-col justify-between">
-      {data && <RequestTableComponent tableData={data} />}
+      {status === "success" && <RequestTableComponent tableData={data} />}
+      {status === "loading" && <LoadingButtonComponent />}
+      {status === "error" && <h1>No Data</h1>}
     </div>
   );
 };

@@ -16,8 +16,9 @@ const TrackRequest = () => {
     if (requestId !== "") {
       try {
         const res = await fetchRequestById(requestId);
+        console.log(res);
         if (res.title !== "") {
-          router.push(`/users/requests/${requestId}`);
+          router.push(`/users/requests/${requestId}?owner=${res.requestOwner}`);
         } else {
           toast.error("Request Not Exits");
         }

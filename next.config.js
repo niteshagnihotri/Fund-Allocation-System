@@ -1,4 +1,8 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {}
-
-module.exports = nextConfig
+const nextConfig = {
+    experimental: {
+      serverComponentsExternalPackages: ["ipfs-utils"],
+    },
+  };
+  
+  module.exports = nextConfig;

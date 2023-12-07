@@ -90,11 +90,17 @@ const UserHomeComponent = () => {
           </Tab>
         </div>
       </div>
+      {
+        (status === "error") && <h1>Data Not Found</h1>
+      }
       {status === "loading" && (
         <>
           <LoadingButtonComponent />
         </>
       )}
+      {
+        
+      }
       {status === "success" && <RequestTableSection currentTab={currentTab} />}
     </div>
   );

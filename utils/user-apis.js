@@ -158,9 +158,10 @@ export async function fetchUsersAllRequestByStatus(currentTab) {
   try {
     if (checkUserExists()) {
       const { contract, signer } = await connectWeb3();
-      if (contract && checkUserExists()) {
+      if (contract) {
         const currentUser = await signer.getAddress();
         const ipfsData = await fetchIPFSData();
+        console.log("ipfsData ============> ", ipfsData);
         let requestsData = [];
         // Iterate over addresses
         const allRequests = ipfsData[currentUser];

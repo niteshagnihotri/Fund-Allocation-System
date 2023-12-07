@@ -16,6 +16,7 @@ export async function registerUser(data) {
     // console.log(data);
     const { contract, signer } = await connectWeb3();
     const currentUser = await signer.getAddress();
+    console.log("currentUser ::::::: ", currentUser);
     const admin = await getAdmin();
     if (admin === currentUser && contract) {
       const address = ethers.getAddress(data.userAddress); // string to address

@@ -18,6 +18,7 @@ const RequestDetailsPage = () => {
   const { data, status } = useQuery({
     queryKey: ["request", id],
     queryFn: () => fetchRequestByOwnerAndID(requestOwner, id),
+    enabled: !!id
   });
 
   return (

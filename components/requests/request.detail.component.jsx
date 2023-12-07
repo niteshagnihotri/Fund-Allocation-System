@@ -75,11 +75,11 @@ const RequestDetailsComponent = ({ data }) => {
               <h1 className="font-bold text-gray-900">Status</h1>
               <p>{statuses[data?.status]}</p>
             </div>
-            {data?.status === 3 && (
-              <h1>
-                Denial Reason :{" "}
-                <span className="font-normal">{data?.denialReason}</span>
-              </h1>
+            {(data?.status === 3 || data?.denialReason !== "") && (
+              <div className="space-y-3">
+              <h1 className="font-bold text-gray-900">Denial Reason</h1>
+              <p>{data?.denialReason}</p>
+            </div>
             )}
           </div>
           {/* col 2 */}

@@ -22,6 +22,9 @@ const Transactions = () => {
         status === "success" && 
         <TransactionTable tableData={data} />
       }
+      {
+        status === "error" && <h1>Data Not Found</h1>
+      }
     </div>
   );
 };

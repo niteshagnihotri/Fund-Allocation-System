@@ -19,6 +19,7 @@
     "clsx": "^2.0.0",
     "encoding": "^0.1.13",
     "ethers": "^6.7.1",
+    "ipfs-utils": "^9.0.14",
     "kubo-rpc-client": "^3.0.1",
     "lucide-react": "^0.284.0",
     "next": "latest",
