@@ -16,9 +16,11 @@ export async function registerUser(data) {
     // console.log(data);
     const { contract, signer } = await connectWeb3();
     const currentUser = await signer.getAddress();
-    console.log("currentUser ::::::: ", currentUser);
     const admin = await getAdmin();
-    if (admin === currentUser && contract) {
+    if (
+      String(admin).toLowerCase() === String(currentUser).toLowerCase() &&
+      contract
+    ) {
       const address = ethers.getAddress(data.userAddress); // string to address
       const transaction = await contract.register(
         data.name,
@@ -31,15 +33,15 @@ export async function registerUser(data) {
       if (transaction) {
         return true;
       } else {
-        return false;
+        throw new Error("");
       }
     } else {
       console.log("Only Admin can call this function");
-      return false;
+      throw new Error("Admin can call this function");
     }
   } catch (error) {
     console.log(error);
-    return error;
+    throw error;
   }
 }
 
@@ -77,7 +79,7 @@ export async function fetchAllUsersRequestsByStatus(currentTab) {
       }
     } else {
       console.log("Please Login");
-      return false;
+      throw new Error("");
     }
     // return [];
   } catch (error) {
@@ -115,7 +117,7 @@ export async function fetchInstallmentRequestsByNumber() {
       }
     } else {
       console.log("Please Login");
-      return false;
+      throw new Error("");
     }
     // return [];
   } catch (error) {
@@ -133,7 +135,7 @@ export async function transferInstallment(requestOwner, requestId) {
         let localUser = JSON.parse(localStorage.getItem("user"));
         if (localUser.userAddress !== currentUser) {
           toast.error("Only Admin can call this function");
-          return false;
+          throw new Error("");
         }
 
         const transaction = await contract.transferInstallment(
@@ -158,12 +160,12 @@ export async function transferInstallment(requestOwner, requestId) {
       }
     } else {
       console.log("Please Login");
-      return null;
+      throw new Error("Please Login");
     }
     // return [];
   } catch (error) {
     console.error("No Request Found", error);
-    return null;
+    throw error;
   }
 }
 
@@ -176,7 +178,7 @@ export async function denyFundingRequest(requestOwner, requestId, reason) {
         let localUser = JSON.parse(localStorage.getItem("user"));
         if (localUser.userAddress !== currentUser) {
           toast.error("Only Admin can call this function");
-          return false;
+          throw new Error("");
         }
         const transaction = await contract.denyFundingRequest(
           requestOwner,
@@ -193,19 +195,19 @@ export async function denyFundingRequest(requestOwner, requestId, reason) {
         if (receipt) {
           return true;
         } else {
-          return false;
+          throw new Error("Transaction Failed !");
         }
       } else {
         console.log("Please Connect Metamask");
       }
     } else {
       console.log("Please Login");
-      return null;
+      throw new Error("Please Login");
     }
     // return [];
   } catch (error) {
     console.error("No Request Found", error);
-    return null;
+    throw error;
   }
 }
 
@@ -223,7 +225,7 @@ export async function updateUserPassword(userAddress, username, password) {
     }
   } catch (error) {
     console.log(error);
-    return error;
+    throw error;
   }
 }
 
@@ -232,7 +234,10 @@ export async function transferFund(data) {
     const { contract, signer } = await connectWeb3();
     const currentUser = await signer.getAddress();
     const localUser = JSON.parse(localStorage.getItem("user"));
-    if (currentUser === localUser.userAddress) {
+    if (
+      String(currentUser).toLowerCase() ===
+      String(localUser.userAddress).toLowerCase()
+    ) {
       const receiver = ethers.getAddress(data.to);
       const transaction = await contract.transferFund(receiver, data.amount);
       const receipt = await transaction.wait();
@@ -245,13 +250,13 @@ export async function transferFund(data) {
         await addTransaction(transaction);
         return true;
       } else {
-        return false;
+        throw new Error("Transaction Failed");
       }
     } else {
-      return false;
+      throw new Error("User address and current address is different");
     }
   } catch (error) {
     console.log(error);
-    return false;
+    throw error;
   }
 }

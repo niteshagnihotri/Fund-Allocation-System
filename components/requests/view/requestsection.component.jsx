@@ -18,7 +18,7 @@ const RequestTableSection = ({ currentTab }) => {
     <div className="bg-white rounded-md min-h-[400px] flex flex-col justify-between">
       {status === "success" && <RequestTableComponent tableData={data} />}
       {status === "loading" && <LoadingButtonComponent />}
-      {status === "error" && <h1>No Data</h1>}
+      {status === "error" && <h1 className="text-center text-sm text-red-500 ">Some Error Occured</h1>}
     </div>
   );
 };

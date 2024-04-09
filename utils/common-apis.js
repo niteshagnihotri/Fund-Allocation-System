@@ -282,7 +282,7 @@ export async function getAdmin() {
     }
   } catch (error) {
     console.log(error);
-    return null;
+    throw error;
   }
 }
 

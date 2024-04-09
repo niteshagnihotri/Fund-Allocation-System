@@ -21,7 +21,7 @@ export default function RootLayout({ children }) {
             <NextTopLoader color="#518554" height={5} showSpinner={false} />
             <NavbarLayout>
               {children}
-              <ToastContainer />
+              <ToastContainer theme="colored" position="bottom-right" autoClose={1000}/>
             </NavbarLayout>
           </div>
         </ReactQueryProvider>

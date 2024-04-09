@@ -36,6 +36,10 @@ const RequestDetailsPage = () => {
         </>
       )}
 
+      {
+        status === "error" && <h1 className="text-sm text-center text-red-500 font-semibold">Some Error Occurred</h1>
+      }
+
       {status === 'success' && (
         <RequestDetailsComponent data={data} />
       )}

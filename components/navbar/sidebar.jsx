@@ -130,7 +130,7 @@ const Sidebar = () => {
           <button
             type="button"
             onClick={() => router.push("/login")}
-            className="flex rounded-sm px-10 py-1 border shadow-sm border-primary text-primary font-semibold text-sm"
+            className="flex rounded-sm px-10 py-1 border hover:bg-primary hover:text-white transition-all delay-200 duration-500 shadow-sm border-primary text-primary font-semibold text-sm"
           >
             Login <BiArrowToRight className="ml-1 text-lg" />
           </button>

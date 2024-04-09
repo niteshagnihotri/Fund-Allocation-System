@@ -102,6 +102,11 @@ const RequestDetailsComponent = ({ data }) => {
               <h1 className="font-bold text-gray-900">Installment No : </h1>
               <p>{data?.installmentNumber}</p>
             </div>
+
+            <div className="flex items-center space-x-3">
+              <h1 className="font-bold text-gray-900">Installment Status : </h1>
+              <p>{data?.installmentStatus ? "Created" : "Not Created"}</p>
+            </div>
         
             <div className="flex items-center space-x-3 flex-wrap">
               <h1 className="font-bold text-gray-900">Documents : </h1>

@@ -82,6 +82,7 @@ export async function fetchRequestByOwnerAndID(requestOwner, requestId) {
     );
 
     if (transaction) {
+      console.log("transaction ", transaction);
       let valuesArray = Object.values(transaction);
       let documentsHashes = transaction[9];
       let documentsArray = Object.values(documentsHashes);
@@ -121,6 +122,7 @@ export async function fetchRequestById(requestId) {
         requestId
       );
       if (transaction) {
+        console.log("transaction ", transaction);
         let valuesArray = Object.values(transaction);
         let documentsHashes = transaction[9];
         let documentsArray = Object.values(documentsHashes);
@@ -162,33 +164,39 @@ export async function fetchUsersAllRequestByStatus(currentTab) {
         const currentUser = await signer.getAddress();
         const ipfsData = await fetchIPFSData();
         console.log("ipfsData ============> ", ipfsData);
-        let requestsData = [];
-        // Iterate over addresses
-        const allRequests = ipfsData[currentUser];
-        if (allRequests.length === 0) {
+        if(Object.keys(ipfsData).length > 0){
+          let requestsData = [];
+          // Iterate over addresses
+          const allRequests = ipfsData[currentUser];
+          if (allRequests.length === 0) {
+            return [];
+          }
+          // filter requests
+          for (const requestIdKey in allRequests) {
+            const request = allRequests[requestIdKey];
+            if (currentTab === "all") {
+              requestsData.push(request);
+            } else if (request.status === tabs[`${currentTab}`]) {
+              requestsData.push(request);
+            }
+          }
+          requestsData.sort((a, b) => a.date_updated - b.date_updated);
+          return requestsData;
+        }
+        else{
           return [];
         }
-        // filter requests
-        for (const requestIdKey in allRequests) {
-          const request = allRequests[requestIdKey];
-          if (currentTab === "all") {
-            requestsData.push(request);
-          } else if (request.status === tabs[`${currentTab}`]) {
-            requestsData.push(request);
-          }
-        }
-        requestsData.sort((a, b) => a.date_updated - b.date_updated);
-        return requestsData;
       } else {
         console.log("Please Connect Metamask");
+        throw new Error("Please Connect Metamask");
       }
     } else {
       console.log("Please Login");
-      return null;
+      throw new Error("Please Login");
     }
   } catch (error) {
     console.error("No Request Found", error);
-    return null;
+    throw error;
   }
 }
 

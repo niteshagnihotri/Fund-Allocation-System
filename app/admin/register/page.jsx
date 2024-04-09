@@ -41,14 +41,14 @@ export default function RegisterUser () {
   };
 
   return (
-    <div className="flex justify-center items-center align-middle min-h-fit">
+    <div className="flex justify-center items-center align-middle min-h-screen">
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="w-full lg:w-[80%] p-10 space-y-8 text-sm border-2 rounded-md"
+        className="w-full lg:w-[80%] lg:max-w-3xl p-10 space-y-8 text-sm rounded-xl shadow-sm bg-white"
       >
-        <div>
+        <div className="">
           <BackButton />
-          <h1 className="text-xl mt-2 font-semibold"> Create User !</h1>
+          <h1 className="text-xl mt-2 font-semibold"> Create New User !</h1>
         </div>
         <TextInputComponent
           type="text"
@@ -87,7 +87,7 @@ export default function RegisterUser () {
           name="userAddress"
           register={register}
           errors={errors}
-          placeholder="userAddress"
+          placeholder="User Address"
           className=""
         />
         <button
